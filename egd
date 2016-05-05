@@ -1,0 +1,76 @@
+#! /usr/bin/env node
+
+var fs = require( 'fs' ),
+	    stat = fs.stat;
+var processor = require('process');
+var arguments = process.argv.splice(2);
+//console.log(arguments);
+//["create","projectName"]
+//
+
+if( arguments.length != 2 )
+{
+	console.log("命令错误，请使用 'create' 命令");
+}
+else
+{
+	if(arguments[0]=="create")
+	{
+		//正确，创建项目
+		createPro(arguments[1]);
+	}
+	else
+	{
+		console.log("命令错误");
+	}
+}
+
+
+function copy( src, dst ){
+    fs.readdir( src, function( err, paths ){
+        if( err ){
+            throw err;
+        }
+        paths.forEach(function( path ){
+            var _src = src + '/' + path,
+                _dst = dst + '/' + path,
+                readable, writable;       
+            stat( _src, function( err, st ){
+                if( err ){
+                    throw err;
+                }
+                if( st.isFile() ){
+                    readable = fs.createReadStream( _src );
+                    writable = fs.createWriteStream( _dst );   
+                    readable.pipe( writable );
+                }
+                else if( st.isDirectory() ){
+                    exists( _src, _dst, copy );
+                }
+            });
+        });
+    });
+};
+function exists( src, dst, callback ){
+    fs.exists( dst, function( exists ){
+        if( exists ){
+            callback( src, dst );
+        }
+        else{
+            fs.mkdir( dst, function(){
+                callback( src, dst );
+            });
+        }
+    });
+};
+
+
+//创建项目
+function createPro(name)
+{
+	console.log("正在创建项目，项目名称:" + name);
+	//console.log( processor.cwd() );
+	exists( '/usr/local/egd/temp', processor.cwd()+"/"+name, copy);
+	console.log("项目创建完成.");
+	console.log("项目地址："+processor.cwd()+"/"+name);
+}
