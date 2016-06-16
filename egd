@@ -1,5 +1,6 @@
 #! /usr/bin/env node
-
+var egret3dgiturl = "/Users/mebius/Documents/work/3d/egret3dgit/egret-3d";
+var egret3dgitsourcepath = "/Egret3D/"
 var fs = require( 'fs' ),
 	    stat = fs.stat;
 var processor = require('process');
@@ -8,17 +9,79 @@ var arguments = process.argv.splice(2);
 //["create","projectName"]
 //
 
-if( arguments.length != 2 )
+if( arguments.length < 1 )
 {
-	console.log("命令错误，请使用 'create' 命令");
+	console.log("请使用 'create' 命令或者 'update' 命令");
 }
 else
 {
 	if(arguments[0]=="create")
 	{
-		//正确，创建项目
-		createPro(arguments[1]);
+        if( arguments.length != 2 )
+        {
+            console.log("请指定项目名称")
+        }
+        else
+        {
+            //正确，创建项目
+            createPro(arguments[1]);
+        }
 	}
+    else if(arguments[0]=="update")
+    {
+        //升级引擎
+        console.log("当前项目路径："+processor.cwd());
+        var curURL = processor.cwd()
+        //判断当前项目下是否有libs文件夹
+        var folder_libs = fs.existsSync(curURL+"/libs");
+        if(folder_libs)
+        {
+            //存在，检测源码目录是否正常
+            var sourceURL = egret3dgiturl + egret3dgitsourcepath;
+            var isSURL = fs.existsSync( sourceURL );
+            if(isSURL)
+            {
+                //路径存在，生成JS文件
+                var callfile = require('child_process'); 
+                callfile.execFile('build3dsource',[ '-U', sourceURL],null,
+                    function (err, stdout, stderr) {
+                        if(err)
+                        {
+                            //console.log(err,stderr);
+                            console.log("[内部错误] Error: 3000, shell execute fail.");
+                        }
+                        else
+                        {
+                            //生成完成，拷贝文件
+                            //egret3d.d.ts、egret3d.js直接拷贝，egret3d.min.js从egret3d.js文件复制
+                            fs.writeFileSync(curURL+"/libs"+"/egret3d.d.ts", fs.readFileSync(sourceURL+"egret3d.d.ts"));
+
+                            fs.writeFileSync(curURL+"/libs"+"/egret3d.js", fs.readFileSync(sourceURL+"egret3d.js"));
+                            //fs.writeFileSync(curURL+"/libs"+"/egret3d.min.js", fs.readFileSync(sourceURL+"egret3d.js"));
+                            //生成min.js
+                            var UglifyJS = require("./uglify-js/uglifyjs");
+                            var file = require("./file");
+                            var defines = {
+                                DEBUG: false,
+                                RELEASE: true
+                            }
+                            var result = UglifyJS.minify(curURL+"/libs"+"/egret3d.js", { compress: { global_defs: defines }, output: { beautify: false } });
+                            file.save(curURL+"/libs"+"/egret3d.min.js", result.code);
+                            console.log("升级完成");
+                        }
+                    });
+
+            }
+            else
+            {
+                console.log("引擎源码未找到，请检查配置！");
+            }
+        }
+        else
+        {
+            console.log("项目错误，无法升级！");
+        }
+    }
 	else
 	{
 		console.log("命令错误");

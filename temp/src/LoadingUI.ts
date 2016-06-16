@@ -12,7 +12,7 @@ class LoadingUI {
     private div: HTMLElement;
 
     public constructor() {
-        this.div = document.getElementById('div1');
+        this.div = document.getElementById('descCon');
     }
 
     public OnInitLoadingView(max: number) {
@@ -35,14 +35,14 @@ class LoadingUI {
             this.CloseLoadingView();
         } else {
             this.cur++;
-            this.div.innerHTML = `正在加载:${this.cur / this.max * 100}%`;
+            this.div.innerHTML = `正在加载:${Math.ceil(this.cur / this.max * 100)}%`;
         }
     }
 
     public CloseLoadingView(): void {
         this.div.innerHTML = "正在加载:100%";
         window.setTimeout(() => {
-            var loadingMap = document.getElementById('loadingMap');
+            var loadingMap = document.getElementById('loadingCon');
             loadingMap.hidden = true;
         },1000);
     }

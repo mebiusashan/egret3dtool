@@ -1,0 +1,23 @@
+#!/bin/sh
+
+URL=
+while getopts "U:" arg
+do
+	case $arg in
+		U)
+			URL=$OPTARG
+			;;
+		?)
+		echo "未知参数！"
+	exit 1
+	;;
+	esac
+done
+
+if [ ! -n "$URL" ]; then
+echo "缺少路径参数"
+else
+cd $URL
+tsc
+echo "引擎编译成功"
+fi

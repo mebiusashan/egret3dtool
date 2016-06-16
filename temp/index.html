@@ -31,7 +31,6 @@
     <!--这个标签会被替换为项目中所有的 javascript 文件。删除 game_files 标签后，项目文件加载列表将不会变化，请谨慎操作！-->
     <!--game_files_start-->
 	<script egret="game" src="bin-debug/LoadingUI.js"></script>
-	<script egret="game" src="bin-debug/HelloWorld.js"></script>
 	<script egret="game" src="bin-debug/Main.js"></script>
 	<!--game_files_end-->
     <script>
@@ -45,21 +44,22 @@
 <body>
 
     <div style="margin: auto;width: 100%;height: 100%;" class="egret-player" 
-//         data-entry-class="Main"
-//         data-orientation="auto"
-//         data-scale-mode="noScale"
-//         data-frame-rate="30"
-//         data-content-width="640"
-//         data-content-height="960"
-//         data-show-paint-rect="false"
-//         data-multi-fingered="2"
-//         data-show-fps="false" data-show-log="false"
-//         data-log-filter="" data-show-fps-style="x:0,y:0,size:30,textColor:0x00c200,bgAlpha:0.9">
+        data-entry-class="Main"
+        data-orientation="auto"
+        data-scale-mode="noScale"
+        data-frame-rate="30"
+        data-content-width="640"
+        data-content-height="960"
+        data-show-paint-rect="false"
+        data-multi-fingered="2"
+        data-show-fps="false" data-show-log="false"
+        data-log-filter="" data-show-fps-style="x:0,y:0,size:30,textColor:0x00c200,bgAlpha:0.9">
     	
-    	<div id="loadingMap" style="position:absolute;width:100%;height:100%;background:#ffffff">
+    	<div id="loadingCon" style="position:absolute;width:100%;height:100%;background:#ffffff">
     		<img id="loadingIcon" width="72" height="72" src="resource/logo.png" style="position:absolute;top:50%;left:50%;margin-top:-116px;margin-left:-36px" />
-    	<div id='div1'  width="100" height="50" style="position:absolute;top:50%;left:50%;margin-top:-36px;margin-left:-36px"></div>
+    	    <div id='descCon'  width="100" height="50" style="position:absolute;top:50%;left:50%;margin-top:-36px;margin-left:-50px"></div>
     	</div>
+        
     </div>
     <script>
         setTimeout( function () {
