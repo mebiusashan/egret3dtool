@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-var egret3dgiturl = "/Users/mebius/Documents/work/3d/egret3dgit/egret-3d";
+var egret3dgiturl = "/Users/mebius/Documents/git/egret-3d";
 var egret3dgitsourcepath = "/Egret3D/"
 var fs = require( 'fs' ),
 	    stat = fs.stat;
@@ -133,7 +133,7 @@ function createPro(name)
 {
 	console.log("正在创建项目，项目名称:" + name);
 	//console.log( processor.cwd() );
-	exists( '/usr/local/egd/temp', processor.cwd()+"/"+name, copy);
+	exists( __dirname+'/temp', processor.cwd()+"/"+name, copy);
 	console.log("项目创建完成.");
 	console.log("项目地址："+processor.cwd()+"/"+name);
 }
